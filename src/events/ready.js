@@ -22,7 +22,6 @@ module.exports = {
 			}
 			console.error(client.color.red(`[MYSQL] Não foi possivel fazer uma conexão com o banco de dados! Erro: ${e.message}`))
 		})
-		console.log(client.color.green(`\n[CLIENT] O bot foi iniciado com sucesso! \n` +
-		client.color.yellow.bold(`\nBot: ${client.user.tag} \nID: ${client.user.id}\nLink de convite: https://discordapp.com/oauth2/authorize?client_id=${client.user.id}&scope=bot&permissions=8`)));
+		console.log(client.color.green(`\n[CLIENT] O bot foi iniciado com sucesso! \n` + client.color.yellow.bold(`\nBot: ${client.user.tag} \nID: ${client.user.id}\nLink de convite: https://discordapp.com/oauth2/authorize?client_id=${client.user.id}&scope=bot&permissions=8`)));
 	},
 };
