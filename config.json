@@ -1,0 +1,11 @@
+{
+    "prefix": "!",
+    "token": "",
+    "mysql": {
+        "host": "",
+        "user": "",
+        "password": "",
+        "database": "",
+        "port": 3306
+    }
+}
