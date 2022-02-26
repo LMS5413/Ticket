@@ -18,10 +18,10 @@ module.exports = {
                         allowNull: false,
                     }
                 });
-                return console.log(`[MYSQL] Tabela criada com sucesso`);
+                return console.log(`[MYSQL] Tabela criada com sucesso!`);
             }
             console.error(`[MYSQL] Não foi possivel fazer uma conexão com o banco de dados! Erro: ${e.message}`);
         });
-        console.log(`\n[CLIENT] O bot foi iniciado com sucesso!\n\nBot: ${client.user.tag}\nID: ${client.user.id}\nLink de convite: https://discordapp.com/oauth2/authorize?client_id=${client.user.id}&scope=bot&permissions=8`);
+        console.log(`\n[CLIENT] A aplicação foi inicializada com sucesso!\n\nBot: ${client.user.tag}\nID: ${client.user.id}\nLink de convite: https://discordapp.com/oauth2/authorize?client_id=${client.user.id}&scope=bot&permissions=8`);
     },
 };

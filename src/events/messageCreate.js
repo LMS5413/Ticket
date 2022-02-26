@@ -2,8 +2,7 @@ const { prefix } = require('../../config.json');
 
 module.exports = {
     execute(client, message) {
-        if (message.author.bot) return;
-        if (message.channel.type === "DM") return;
+        if (message.author.bot || message.channel.type === "DM") return;
         if (!message.content.startsWith(prefix)) return;
 
         const args = message.content.slice(prefix.length).trim().split(/ +/g);
