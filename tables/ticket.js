@@ -21,6 +21,7 @@ let ticket = sequelize.define("tickets", {
         allowNull: false,
     }
 });
+sequelize.sync()
 
 module.exports = ticket;
 module.exports.connect = sequelize;
