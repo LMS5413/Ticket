@@ -69,7 +69,7 @@ module.exports = {
         }
 
         if (interaction.customId !== "ticket-abert") return;
-        if (ticket) return interaction.channel.send({ content: "Você já possui um ticket aberto!", ephemeral: true });
+        if (ticket) return interaction.reply({ content: "Você já possui um ticket aberto!", ephemeral: true });
         let channel = await interaction.guild.channels.create(`${interaction.values[0]}-${interaction.user.username}-${interaction.user.discriminator}`, {
             type: "text",
             permissionOverwrites: [
