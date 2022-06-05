@@ -20,6 +20,19 @@ caso esteja utolizando o `npm`
 npm install
 ```
 
+**Como configurar?**
+
+Na `config.json` adicione o token do seu bot e coloque os dados do banco de dados `mysql`
+
+Depois digite o comando:
+```
+node index.js
+```
+
+Para criar uma mensagem de ticket basta digitar `!ticket` Caso queira alterar as mensagens ou mudar de cor entre na pasta `src > commands > ticketaltera altere!
+
+Caso queira mudar o nome do canal ou configurar a mensagem quando é enviada ao abrir o ticket basta ir em `src > events > interactionCreate.json`
+
 # imagens de demostração:
 
 ![](https://media.discordapp.net/attachments/982952386001776673/982989264948170782/Screenshot_20220605-094731.jpg)
