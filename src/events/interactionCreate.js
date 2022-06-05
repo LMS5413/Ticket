@@ -1,5 +1,5 @@
 const { MessageEmbed, MessageActionRow, MessageButton, MessageAttachment } = require("discord.js");
-const dbTicket = require('../../tables/ticket');
+const dbTicket = require('../../src/tables/ticket');
 
 module.exports = {
     async execute(client, interaction) {

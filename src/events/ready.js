@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const colors = require('colors');
 const { mysql } = require('../../config.json');
-const table = require('../../tables/ticket');
+const table = require('../../src/tables/ticket');
 const queryInterface = table.connect.getQueryInterface();
 
 module.exports = {
