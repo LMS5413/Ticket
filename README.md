@@ -40,7 +40,7 @@ Caso queira mudar o nome do canal ou configurar a mensagem quando é enviada ao 
 ![](https://media.discordapp.net/attachments/982952386001776673/982989852335280128/Screenshot_20220605-095010.jpg)
 ![](https://media.discordapp.net/attachments/982952386001776673/982990202685517854/Screenshot_20220605-095146.jpg)
 ![](https://media.discordapp.net/attachments/982952386001776673/982990462229049364/Screenshot_20220605-095248.jpg)
-![](https://media.discordapp.net/attachments/982952386001776673/982990854492942436/Screenshot_20220605-095338.jpg)
+![](https://media.discordapp.net/attachments/982952386001776673/982998199084142653/Screenshot_20220605-102320.jpg)
 
 # Contribuidores
 ![](https://contrib.rocks/image?repo=LMS5413/Ticket)
