@@ -7,3 +7,4 @@ este é basicamente um projeto de nivel simples, um bot de ticket do discord [V 
 # O que são os Tickets? 
 
 É um chat privado que você poderá falar diretamente com uma equipe para tirar suas dúvidas, resolver problemas etc....
+
