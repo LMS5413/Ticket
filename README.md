@@ -46,7 +46,9 @@ Caso queira mudar o nome do canal ou configurar a mensagem quando é enviada ao 
 ![](https://contrib.rocks/image?repo=LMS5413/Ticket)
 
 # License
-este repositório está licenciado: https://apache.org/licenses/LICENSE-2.0
 
+este repositório está licenciado:<br>
+https://apache.org/licenses/LICENSE-2.0
 
+# criador 
 **O autor original é o [LMS5413](https://github.com/LMS5413).**
