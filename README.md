@@ -44,3 +44,5 @@ Caso queira mudar o nome do canal ou configurar a mensagem quando é enviada ao 
 
 # Contribuidores
 ![](https://contrib.rocks/image?repo=LMS5413/Ticket)
+
+**O autor original é o ![LMS5413](https://github.com/LMS5413).
