@@ -70,7 +70,7 @@ module.exports = {
 
         if (interaction.customId !== "ticket-abert") return;
         if (ticket) return interaction.reply({ content: "Você já possui um ticket aberto!", ephemeral: true });
-        let channel = await interaction.guild.channels.create(`${interaction.values[0]}-${interaction.user.username}-${interaction.user.discriminator}`, {
+        let channel = await interaction.guild.channels.create(`ticket-${interaction.user.discriminator}`, {
             type: "text",
             permissionOverwrites: [
                 {
@@ -87,20 +87,29 @@ module.exports = {
                 },
             ]
         });
-        interaction.reply({ content: "Seu ticket foi aberto com sucesso! <#" + channel.id + ">", ephemeral: true });
+      
+       interaction.reply({ content: "Seu ticket foi aberto com sucesso! <#" + channel.id + ">", ephemeral: true });
 
         const embed = new MessageEmbed()
-            .setTitle("Atendimento")
-            .setDescription("Você receberá suporte em breve, enquanto isso descreva em detalhes abaixo o problema que você está enfrentando. Para fechar esse ticket é só apertar o botão abaixo");
+            .setTitle("📫 Suporte de Kettra!")
+            .setColor("#71368A")
+            .setThumbnail(interaction.guild.iconURL({ dynamic : true, format: "png", size: 1024}))
+            .setDescription("Você receberá suporte em breve, enquanto isso descreva em detalhes o problema que você está enfrentando.");
 
-        const row = new MessageActionRow()
-            .addComponents(
-                new MessageButton()
-                    .setLabel("Fechar")
-                    .setStyle("SECONDARY")
-                    .setCustomId("fechar")
-            );
-        channel.send({ embeds: [embed], components: [row] });
-        await dbTicket.create({ id: interaction.user.id, idc: channel.id });
+   const row = new MessageActionRow()
+      .addComponents(
+        new MessageButton()
+                .setLabel("Fechar")
+                .setStyle("DANGER")
+                .setEmoji("⚠️")
+                .setCustomId("fechar")
+         );
+         
+    channel.send({ content: `${interaction.user}`, embeds: [embed], components: [row] });
+    
+  await dbTicket.create({ id: interaction.user.id, idc: channel.id });
+  
     },
+    
 };
+

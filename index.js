@@ -1,7 +1,18 @@
+const express = require('express');
+const app = express();
+app.get("/", (request, response) => {
+  const ping = new Date();
+  ping.setHours(ping.getHours() - 3);
+  console.log(`Novo ping em: ${ping.getUTCHours()}:${ping.getUTCMinutes()}:${ping.getUTCSeconds()}`);
+  response.sendStatus(200);
+});
+app.listen(process.env.PORT); 
+
 const { Client, Collection } = require('discord.js');
 const client = new Client({ intents: ['GUILDS', 'GUILD_MESSAGES'] });
 const { token } = require('./config');
 const fs = require('fs');
+
 
 client.commands = new Collection();
 

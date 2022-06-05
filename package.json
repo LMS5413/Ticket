@@ -1,10 +1,15 @@
 {
-  "name": "TicketWithHTML",
+  "name": "KellyWorld",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "start": "npm install && node index.js",
+    "backup": "rm -rf *"
+  },
   "dependencies": {
     "discord.js": "^13.6.0",
+    "express": "^4.18.1",
     "mongoose": "^6.1.8",
     "mysql2": "^2.3.3",
     "reconlx": "^2.5.2",

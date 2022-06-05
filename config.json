@@ -1,6 +1,6 @@
 {
     "prefix": "!",
-    "token": "XXXX",
+    "token": "",
     "mysql": {
         "host": "",
         "user": "",

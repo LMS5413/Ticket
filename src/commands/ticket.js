@@ -2,8 +2,10 @@ const { MessageActionRow, MessageEmbed, MessageSelectMenu } = require('discord.j
 
 module.exports.run = async (client, message) => {
     const embed = new MessageEmbed()
-        .setTitle("Atendimento")
-        .setDescription("Selecione um dos atendimentos! Embaixo");
+        .setColor("#71368A")
+        .setThumbnail(message.guild.iconURL({ dynamic : true, format: "png", size: 1024}))
+        .setTitle("<:K_:947545349151653898> Suporte de Kettra!")
+        .setDescription("Ola, Boas vindas a central de atendimento de **Kettra World**.\n\n<:K_env:938833579981566043> Para começar o atendimento selecione uma das opções abaixo que lê melhor corresponde!");
 
     const row = new MessageActionRow()
         .addComponents(
@@ -12,23 +14,18 @@ module.exports.run = async (client, message) => {
                 .setPlaceholder('Selecione o tipo de atendimento!')
                 .addOptions([
                     {
-                        label: 'Selecione o tipo de atendimento!',
-                        emoji: '💵',
-                        value: 'financeiro',
-                    },
-                    {
-                        label: 'Reporte de Bugs',
-                        emoji: '🐛',
+                        label: 'Reportar Bugs.',
+                        emoji: '<:K_atencao:943658966473392128>',
                         value: 'bugs',
                     },
                     {
-                        label: 'Dúvida Geral',
-                        emoji: '💬',
+                        label: 'Dúvidas sobre o servidor.',
+                        emoji: '<:K_humm:939225711678459934>',
                         value: 'duvidas',
                     },
                     {
-                        label: 'Outro',
-                        emoji: '🔧',
+                        label: 'Outro assunto não listado.',
+                        emoji: '<:KConstrutores:980993351455211520>',
                         value: 'outro',
                     },
                 ]),
