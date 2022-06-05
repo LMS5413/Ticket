@@ -14,5 +14,5 @@ este é basicamente um projeto de nivel simples, um bot de ticket do discord [V 
 ![](https://media.discordapp.net/attachments/982952386001776673/982989507244728320/Screenshot_20220605-094852.jpg)
 ![](https://media.discordapp.net/attachments/982952386001776673/982989852335280128/Screenshot_20220605-095010.jpg)
 ![](https://media.discordapp.net/attachments/982952386001776673/982990202685517854/Screenshot_20220605-095146.jpg)
-![]()
-![]()
+![](https://media.discordapp.net/attachments/982952386001776673/982990462229049364/Screenshot_20220605-095248.jpg)
+![](https://media.discordapp.net/attachments/982952386001776673/982990854492942436/Screenshot_20220605-095338.jpg)
