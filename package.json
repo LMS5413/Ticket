@@ -1,15 +1,16 @@
 {
-  "name": "KellyWorld",
+  "name": "BotTicket",
   "version": "1.0.0",
+  "description": "este é basicamente um projeto de nivel simples, um bot de ticket do discord V 13.7.0 feito em javascript completo via SelectMenus e usando banco de dados mysql.",
   "main": "index.js",
-  "license": "MIT",
+  "license": "Apache-2.0 License",
   "scripts": {
     "start": "npm install && node index.js",
     "backup": "rm -rf *"
   },
   "dependencies": {
-    "discord.js": "^13.6.0",
-    "express": "^4.18.1",
+    "colors": "^1.4.0",
+    "discord.js": "^13.7.0",
     "mongoose": "^6.1.8",
     "mysql2": "^2.3.3",
     "reconlx": "^2.5.2",
