@@ -8,6 +8,18 @@ este é basicamente um projeto de nivel simples, um bot de ticket do discord [V 
 
 É um chat privado que você poderá falar diretamente com uma equipe para tirar suas dúvidas, resolver problemas etc....
 
+# como utilizar este repositorio:
+
+No seu terminal digite este comando se estiver usando `yarn`
+```
+yarn install
+````
+
+caso esteja utolizando o `npm`
+```
+npm install
+```
+
 # imagens de demostração:
 
 ![](https://media.discordapp.net/attachments/982952386001776673/982989264948170782/Screenshot_20220605-094731.jpg)
