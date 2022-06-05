@@ -1,6 +1,6 @@
-ignorando os modulos
+# ignorando os modulos
 node_modules/
 
-ignorando os os lixo...
+# ignorando os os lixo...
 yarn.lock
 package-lock.json
