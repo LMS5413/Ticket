@@ -8,3 +8,9 @@ este é basicamente um projeto de nivel simples, um bot de ticket do discord [V 
 
 É um chat privado que você poderá falar diretamente com uma equipe para tirar suas dúvidas, resolver problemas etc....
 
+# imagens de demostração:
+
+![](https://media.discordapp.net/attachments/982952386001776673/982989264948170782/Screenshot_20220605-094731.jpg)
+![]()
+![]()
+![]()
