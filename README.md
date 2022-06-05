@@ -29,7 +29,7 @@ Depois digite o comando:
 node index.js
 ```
 
-Para criar uma mensagem de ticket basta digitar `!ticket` Caso queira alterar as mensagens ou mudar de cor entre na pasta `src > commands > ticketaltera altere!
+Para criar uma mensagem de ticket basta digitar `!ticket` Caso queira alterar as mensagens ou mudar de cor entre na pasta `src > commands > ticket` e altera!
 
 Caso queira mudar o nome do canal ou configurar a mensagem quando é enviada ao abrir o ticket basta ir em `src > events > interactionCreate.json`
 
