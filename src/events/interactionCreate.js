@@ -44,20 +44,22 @@ module.exports = {
                     );
                 interaction.channel.send({ embeds: [embed], components: [row] });
             }
-            interaction.deferUpdate()
             switch (interaction.customId) {
                 case "transcript":
+                    interaction.deferUpdate()
                     let transcript = require('../functions/transcript');
                     let bufferHtml = await transcript(interaction.channel, interaction.guild);
                     const attachment = new AttachmentBuilder(bufferHtml, `transcript-${ticket.id}.html`);
                     interaction.channel.send({ content: `Transcript gerado com sucesso!`, files: [attachment] });
                     break;
                 case "delete":
+                    interaction.deferUpdate()
                     let close = require('../functions/deleteTicket');
                     close(interaction.channel);
                     dbTicket.destroy({ where: { idc: interaction.channel.id } });
                     break;
                 case "reabrir":
+                    interaction.deferUpdate()
                     await interaction.channel.permissionOverwrites.edit(ticket.id, { ViewChannel: true });
                     interaction.message.delete();
                     break;

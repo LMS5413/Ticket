@@ -58,6 +58,7 @@ async function configTicket(client, interaction, db) {
                         await departaments.create({ name: x.category, category_id: x.id && client.channels.cache.get(x.id).type === ChannelType.GuildCategory ? x.id : null, description: x.description, id_guild: interaction.guild.id })
                     })
                     embed.setDescription(`Categorias configurado com sucesso.`)
+                    m.channel.send({embeds: [embed]})
                 })
                 break;
             case "msg_principal":
