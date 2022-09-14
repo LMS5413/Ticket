@@ -13,7 +13,7 @@ module.exports = {
                 arquivocmd.run(client, interaction);
             }
         }
-        const ticket = await dbTicket.findOne({ where: { idc: interaction.channel.id } });
+        const ticket = await dbTicket.findOne({ where: { idc: interaction.channel.id } }) || await dbTicket.findOne({ where: { id: interaction.channel.id } });
         if (interaction.isButton()) {
             if (interaction.customId === "fechar") {
                 if (!ticket) return interaction.deferUpdate()
