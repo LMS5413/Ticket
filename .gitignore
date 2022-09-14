@@ -1,0 +1,7 @@
+# ignorando os modulos
+node_modules/
+
+# ignorando os lixo kkkkk...
+yarn.lock
+package-lock.json
+msg.json

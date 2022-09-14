@@ -1,0 +1,116 @@
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, AttachmentBuilder, ButtonStyle, ChannelType, PermissionFlagsBits, InteractionType, PermissionsBitField } = require("discord.js");
+const dbTicket = require('../tables/models/ticket');
+const config = require("../tables/models/config");
+const roles = require('../tables/models/roles');
+
+module.exports = {
+    async execute(client, interaction) {
+        if (interaction.type === InteractionType.ApplicationCommand) {
+            let arquivocmd = client.commands.get(interaction.commandName);
+            if (arquivocmd) {
+                if (arquivocmd.help.category === "moderation" && !interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) return;
+                arquivocmd.run(client, interaction);
+            }
+        }
+        const ticket = await dbTicket.findOne({ where: { idc: interaction.channel.id } });
+        if (interaction.isButton()) {
+            if (interaction.customId === "fechar") {
+                if (!ticket) return interaction.deferUpdate()
+                await interaction.channel.permissionOverwrites.edit(interaction.user, {ViewChannel: false});
+                const embed = new EmbedBuilder()
+                    .setTitle("Atendimento")
+                    .setDescription("Atendimento fechado com sucesso!");
+                const row = new ActionRowBuilder()
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setLabel('Reabrir')
+                            .setCustomId('reabrir')
+                            .setStyle(ButtonStyle.Primary)
+                            .setEmoji("🔓")
+                    )
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setLabel('Transcript')
+                            .setCustomId('transcript')
+                            .setStyle(ButtonStyle.Secondary)
+                            .setEmoji("📑")
+                    )
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setLabel('Deletar o ticket')
+                            .setCustomId('delete')
+                            .setStyle(ButtonStyle.Danger)
+                            .setEmoji("⛔")
+                    );
+                interaction.channel.send({ embeds: [embed], components: [row] });
+            }
+            interaction.deferUpdate()
+            switch (interaction.customId) {
+                case "transcript":
+                    let transcript = require('../functions/transcript');
+                    let bufferHtml = await transcript(interaction.channel, interaction.guild);
+                    const attachment = new AttachmentBuilder(bufferHtml, `transcript-${ticket.id}.html`);
+                    interaction.channel.send({ content: `Transcript gerado com sucesso!`, files: [attachment] });
+                    break;
+                case "delete":
+                    let close = require('../functions/deleteTicket');
+                    close(interaction.channel);
+                    dbTicket.destroy({ where: { idc: interaction.channel.id } });
+                    break;
+                case "reabrir":
+                    await interaction.channel.permissionOverwrites.edit(ticket.id, { ViewChannel: true });
+                    interaction.message.delete();
+                    break;
+            }
+            return;
+        }
+        if (interaction.customId !== "ticket-abert") return;
+        if (ticket) return interaction.reply({ content: "Você já possui um ticket aberto!", ephemeral: true });
+        const cfg = await config.findOne({where: {id: interaction.guild.id}});
+        const category = JSON.parse(cfg.getDataValue('value'))[JSON.parse(cfg.getDataValue('proprietes')).findIndex(x => x === "categories")].find(x => x.category === interaction.values[0]);
+        const roleList = await roles.findAll({where: {id_guild: interaction.guild.id}})
+        let channel = await interaction.guild.channels.create({
+            name: `${interaction.values[0]}-${interaction.user.username}`,
+            type: ChannelType.GuildText,
+            parent: client.channels.cache.get(category?.id)?.id ?? null,
+            permissionOverwrites: [
+                {
+                    id: client.user.id,
+                    allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.ReadMessageHistory],
+                },
+                {
+                    id: interaction.user.id,
+                    allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.ReadMessageHistory],
+                },
+                {
+                    id: interaction.guild.id,
+                    deny: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.ReadMessageHistory],
+                },
+                ...roleList.filter(x => x.getDataValue('category') === "all" || x.getDataValue('category') === interaction.values[0]).map(x => ({id: x.getDataValue('id_role'), allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.ReadMessageHistory]}))
+            ]
+        });
+
+        interaction.reply({ content: "Seu ticket foi aberto com sucesso! <#" + channel.id + ">", ephemeral: true });
+
+        const embed = new EmbedBuilder()
+            .setTitle("📫 Suporte!")
+            .setColor("#71368A")
+            .setThumbnail(interaction.guild.iconURL({ format: "png", size: 1024 }))
+            .setDescription("Você receberá suporte em breve, enquanto isso descreva em detalhes o problema que você está enfrentando.");
+
+        const row = new ActionRowBuilder()
+            .addComponents(
+                new ButtonBuilder()
+                    .setLabel("Fechar")
+                    .setStyle(ButtonStyle.Danger)
+                    .setEmoji("⚠️")
+                    .setCustomId("fechar")
+            );
+
+        channel.send({ content: `${interaction.user}`, embeds: [embed], components: [row] });
+        await dbTicket.create({ id: interaction.user.id, idc: channel.id });
+
+    },
+
+};
+
