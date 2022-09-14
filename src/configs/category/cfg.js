@@ -67,7 +67,7 @@ async function configTicket(client, interaction) {
                 const collector1 = m.channel.createMessageCollector({ filter: (m) => m.author.id === interaction.user.id });
                 collector1.on('collect', async (m) => {
                     try {
-                        const obj = JSON.parse(`${m.content.replaceAll("`", "\"")[0] !== "{" && m.content.replaceAll("`", "\"")[m.content.length - 2] !== "}" ? `{ ${m.content.replaceAll("`", "\"")} }` : m.content.replaceAll("`", "\"")}`)
+                        const obj = JSON.parse(`${m.content.replace("const lib = require('lib')({token: process.env.STDLIB_SECRET_TOKEN});", "").replace("await lib.discord.channels['@0.3.0'].messages.create(", "").replace("});", "}").replaceAll("`", "\"")[0] !== "{" && m.content.replaceAll("`", "\"")[m.content.length - 2] !== "}" ? `{ ${m.content.replaceAll("`", "\"")} }` : m.content.replaceAll("`", "\"")}`)
                         if (!(Array.isArray(obj.embeds) ? obj.embeds : obj)) {
                             embed.setDescription(`Você não digitou o objeto corretamente.`);
                             return m.channel.send({ embeds: [embed] })
