@@ -43,7 +43,7 @@ module.exports = {
                             .setStyle(ButtonStyle.Danger)
                             .setEmoji("⛔")
                     );
-                interaction.channel.send({ embeds: [embed], components: [row] });
+                interaction.reply({ embeds: [embed], components: [row] });
             }
             switch (interaction.customId) {
                 case "transcript":
