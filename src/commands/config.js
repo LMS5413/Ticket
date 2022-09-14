@@ -51,6 +51,7 @@ module.exports.run = async (client, interaction) => {
                 find.update({id_channel: channel.id})
                 embed.setDescription('Chat onde serão enviado as logs feito com sucesso!')
                 m.channel.send({embeds: [embed]})
+                collector.stop()
             })
         } else require(`../configs/${m.customId.split("_")[1]}/${m.customId.split("_")[2]}`)(client, m)
     })
