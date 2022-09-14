@@ -1,15 +1,15 @@
 const { ActionRowBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const config = require('../tables/models/config');
+const config = require('../tables/models/departaments');
+const roles = require('../tables/models/roles');
 const { existsSync } = require('fs')
 
 module.exports.run = async (client, interaction) => {
-    const find = await config.findOne({ where: { id: interaction.guild.id } })
-    if (!find) await config.create({id: interaction.guild.id, proprietes: JSON.stringify([]),value: JSON.stringify([])})
-    const obj1 = JSON.parse(find?.getDataValue('proprietes') ?? "[]")
+    const departaments = await config.findAll({where: {id_guild: interaction.guild.id}})
+    const obj1 = roles.findAll({where: {id_guild: interaction.guild.id}})
     const embed = new EmbedBuilder()
         .setColor("#71368A")
         .setTitle('Configuração')
-        .setDescription(`> Bem vindo ao sistema de configuração! Aqui você poderá configurar o sistema de ticket do jeito que você quiser! Aqui está uma lista o que você pode configurar \n \n**Quando está ❌ atrás da configuração, é porque ela não foi configurada ainda**\n**Quando está ✅ atrás da configuração, é porque ela foi configurada e você pode configurar novamente** \n \n${!obj1.find(x => x === 'categories') || !existsSync('./msg.json') ?  "❌" : "✅"} Categoria dos tickets e mensagem principal\n${!obj1.find(x => x === 'roles') ? "❌" : "✅"} Cargos que podem ter acesso aos tickets`)
+        .setDescription(`> Bem vindo ao sistema de configuração! Aqui você poderá configurar o sistema de ticket do jeito que você quiser! Aqui está uma lista o que você pode configurar \n \n**Quando está ❌ atrás da configuração, é porque ela não foi configurada ainda**\n**Quando está ✅ atrás da configuração, é porque ela foi configurada e você pode configurar novamente** \n \n${departaments.length === 0 || !existsSync('./msg.json') ?  "❌" : "✅"} Categoria dos tickets e mensagem principal\n${obj1.length === 0 ? "❌" : "✅"} Cargos que podem ter acesso aos tickets`)
     const row = new ActionRowBuilder()
         .addComponents(
             new ButtonBuilder()

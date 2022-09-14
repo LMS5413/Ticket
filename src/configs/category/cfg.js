@@ -89,7 +89,7 @@ async function configTicket(client, interaction, db) {
                                 writeFileSync('./msg.json', JSON.stringify(obj.embeds ?? obj))
                                 embed.setDescription(`Você configurou com sucesso!`)
                                 i.reply({ embeds: [embed] })
-                                collector.stop()
+                                collector1.stop()
                             }
                         })
                         collector.on('end', (reason) => {
