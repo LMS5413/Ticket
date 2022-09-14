@@ -1,7 +1,8 @@
 const { ActionRowBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const config = require('../tables/models/departaments');
 const roles = require('../tables/models/roles');
-const { existsSync } = require('fs')
+const { existsSync } = require('fs');
+const transcript = require('../tables/models/transcript_channel');
 
 module.exports.run = async (client, interaction) => {
     const departaments = await config.findAll({where: {id_guild: interaction.guild.id}})
@@ -23,10 +24,35 @@ module.exports.run = async (client, interaction) => {
                 .setLabel('Configuração dos cargos')
                 .setStyle(ButtonStyle.Primary)
         )
+        .addComponents(
+            new ButtonBuilder()
+                .setCustomId('transcript_channel')
+                .setLabel('Canal de registro dos tickets')
+                .setStyle(ButtonStyle.Primary)
+        )
     const msg = await interaction.reply({ embeds: [embed], components: [row], fetchReply: true })
     const collector = msg.createMessageComponentCollector({ filter: (m) => m.user.id === interaction.user.id })
-    collector.on('collect', (m) => {
-        require(`../configs/${m.customId.split("_")[1]}/${m.customId.split("_")[2]}`)(client, m)
+    collector.on('collect', async (m) => {
+        if (m.customId === "transcript_channel") {
+            let find = await transcript.findOne({where: {id_guild: interaction.guild.id}})
+            if (!find) {
+                await transcript.create({id_guild: interaction.guild.id})
+                find = await transcript.findOne({where: {id_guild: interaction.guild.id}})
+            }
+            embed.setDescription('Digite o ID ou mencione o canal que vai ser enviado as logs')
+            m.reply({embeds: [embed]})
+            const collector = m.channel.createMessageCollector({filter: (m) => m.author.id === interaction.user.id})
+            collector.on('collect', (i) => {
+                const channel = i.guild.channels.cache.get(i.content.replace(/[<#>]/g, ''))
+                if(!channel) {
+                    embed.setDescription('Esse canal não existe. Digite novamente')
+                    return m.channel.send({embeds: [embed]})
+                }
+                find.update({id_channel: channel.id})
+                embed.setDescription('Chat onde serão enviado as logs feito com sucesso!')
+                m.channel.send({embeds: [embed]})
+            })
+        } else require(`../configs/${m.customId.split("_")[1]}/${m.customId.split("_")[2]}`)(client, m)
     })
 };
 module.exports.help = {

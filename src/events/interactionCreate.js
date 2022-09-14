@@ -2,6 +2,7 @@ const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, AttachmentBuilder, Button
 const dbTicket = require('../tables/models/ticket');
 const roles = require('../tables/models/roles');
 const departaments = require("../tables/models/departaments");
+const transcriptModel = require("../tables/models/transcript_channel");
 
 module.exports = {
     async execute(client, interaction) {
@@ -51,6 +52,11 @@ module.exports = {
                     let bufferHtml = await transcript(interaction.channel, interaction.guild);
                     const attachment = new AttachmentBuilder(bufferHtml, `transcript-${ticket.id}.html`);
                     interaction.channel.send({ content: `Transcript gerado com sucesso!`, files: [attachment] });
+                    const transcripts = (await transcriptModel.findAll()).filter(x => client.channels.cache.get(x.getDataValue('id_channel')));
+                    transcripts.forEach(x => {
+                        const channel = client.channels.cache.get(x.getDataValue('id_channel'))
+                        channel.send({ content: `Transcript do canal ${interaction.channel.name} com ID ${interaction.channel.id}`, files: [attachment] });
+                    })
                     break;
                 case "delete":
                     interaction.deferUpdate()
