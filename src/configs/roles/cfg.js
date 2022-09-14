@@ -2,6 +2,7 @@ const { Client, ButtonInteraction, EmbedBuilder, ActionRowBuilder, ButtonBuilder
 const { Model } = require('sequelize');
 const ticket = require('../../tables/models/roles');
 const config = require("../../tables/models/config");
+const departaments = require('../../tables/models/departaments');
 
 /**
  * 
@@ -28,9 +29,9 @@ async function configRoles(client, interaction, db) {
         m.channel.send({embeds: [embed]})
     })
     collector.on('end', async () => {
-        const cfg = await config.findOne({where: {id: interaction.guild.id}});
-        const category = JSON.parse(cfg.getDataValue('value'))[JSON.parse(cfg.getDataValue('proprietes')).findIndex(x => x === "categories")];
-        if (answers[0].toLowerCase() !== "all" && !category?.map?.(x => x.category)?.includes(answers[0].toLowerCase())) {
+        const category = (await departaments.findAll()).filter(x => x.getDataValue('id_guild') === interaction.guild.id)
+        const find = category.filter(x => x.getDataValue('id_guild') === interaction.guild.id)
+        if (answers[0].toLowerCase() !== "all" && !find?.map?.(x => x.name)?.includes(answers[0].toLowerCase())) {
             embed.setDescription('Essa categoria não está configurada!')
             return interaction.channel.send({embeds: [embed]})
         }

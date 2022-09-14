@@ -1,7 +1,7 @@
 const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, AttachmentBuilder, ButtonStyle, ChannelType, PermissionFlagsBits, InteractionType, PermissionsBitField } = require("discord.js");
 const dbTicket = require('../tables/models/ticket');
-const config = require("../tables/models/config");
 const roles = require('../tables/models/roles');
+const departaments = require("../tables/models/departaments");
 
 module.exports = {
     async execute(client, interaction) {
@@ -66,13 +66,12 @@ module.exports = {
         }
         if (interaction.customId !== "ticket-abert") return;
         if (ticket) return interaction.reply({ content: "Você já possui um ticket aberto!", ephemeral: true });
-        const cfg = await config.findOne({where: {id: interaction.guild.id}});
-        const category = JSON.parse(cfg.getDataValue('value'))[JSON.parse(cfg.getDataValue('proprietes')).findIndex(x => x === "categories")].find(x => x.category === interaction.values[0]);
+        const category = (await departaments.findAll()).filter(x => x.getDataValue('id_guild') === interaction.guild.id)
         const roleList = await roles.findAll({where: {id_guild: interaction.guild.id}})
         let channel = await interaction.guild.channels.create({
             name: `${interaction.values[0]}-${interaction.user.username}`,
             type: ChannelType.GuildText,
-            parent: client.channels.cache.get(category?.id)?.id ?? null,
+            parent: client.channels.cache.get(category?.category_id)?.id ?? null,
             permissionOverwrites: [
                 {
                     id: client.user.id,
@@ -86,7 +85,7 @@ module.exports = {
                     id: interaction.guild.id,
                     deny: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.ReadMessageHistory],
                 },
-                ...roleList.filter(x => x.getDataValue('category') === "all" || x.getDataValue('category') === interaction.values[0]).map(x => ({id: x.getDataValue('id_role'), allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.ReadMessageHistory]}))
+                ...roleList.filter(x => x.getDataValue('parent') === "all" || x.getDataValue('category') === interaction.values[0]).map(x => ({id: x.getDataValue('id_role'), allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.ReadMessageHistory]}))
             ]
         });
 

@@ -1,6 +1,5 @@
 const { Client, ButtonInteraction, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType } = require('discord.js')
 const { Model } = require('sequelize');
-const ticket = require('../../tables/models/config');
 const departaments = require('../../tables/models/departaments');
 const { writeFileSync, existsSync } = require('fs')
 
@@ -12,8 +11,6 @@ const { writeFileSync, existsSync } = require('fs')
  */
 
 async function configTicket(client, interaction, db) {
-    var obj1 = JSON.parse(db?.getDataValue('proprietes') ?? "[]");
-    var obj2 = JSON.parse(db?.getDataValue('value') ?? "[]");
     const embed = new EmbedBuilder()
         .setColor("#71368A")
         .setTitle("Configurações")
@@ -57,44 +54,22 @@ async function configTicket(client, interaction, db) {
                     arr.push({ category: m.content.split("-")[0], id: m.content.split("-")[1] === "null" || !m.content.split("-")[1] ? null : m.content.split("-")[1], description: m.content.split("-")[2] === "null" || !m.content.split("-")[2] ? null : m.content.split("-")[2] });
                 })
                 collector.on('end', async () => {
-                    embed.setDescription(`**ADICIONAL** Você gostaria de quando encerre o ticket envie para outra categoria? Se sim envie o ID dela, se não, digite **nao**`)
-                    m.channel.send({ embeds: [embed] });
-                    const collector1 = m.channel.createMessageCollector({ filter: (m) => m.author.id === interaction.user.id });
-                    collector1.on('collect', async (m) => {
-                        if (m.content.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '') !== "nao") {
-                            const channel = m.guild.channels.cache.get(m.content)
-                            if (!channel || channel.type !== ChannelType.GuildCategory) {
-                                embed.setDescription(`Canal inválido`);
-                                return m.channel.send({ embeds: [embed] });
-                            };
-                            obj1.includes("parent-id") ? obj2.splice(obj1.findIndex(x => x === "parent-id"), 0, m.content) : obj2.push(m.content);
-                            if (!obj1.includes("parent-id")) {
-                                obj1.push('parent-id');
-                                obj2.push(m.content)
-                            } else {
-                                obj2.splice(obj1.findIndex(x => x === "parent-id", 0, m.content))
-                            }
-                            await ticket.update({ proprietes: JSON.stringify(obj1), value: JSON.stringify(obj2) }, { where: { id: interaction.guild.id } })
-                            collector1.stop();
-                        } else collector1.stop()
-                        arr.forEach(async x => {
-                            await departaments.create({ name: x.category, category_id: x.id && client.channels.cache.get(x.id).type === ChannelType.GuildCategory ? x.id : null, description: x.description, id_guild: interaction.guild.id })
-                        })
-                        embed.setDescription(`Categorias configurado com sucesso.`)
-                        m.channel.send({ embeds: [embed] })
+                    arr.forEach(async x => {
+                        await departaments.create({ name: x.category, category_id: x.id && client.channels.cache.get(x.id).type === ChannelType.GuildCategory ? x.id : null, description: x.description, id_guild: interaction.guild.id })
                     })
+                    embed.setDescription(`Categorias configurado com sucesso.`)
                 })
                 break;
             case "msg_principal":
                 embed.setDescription(`Digite o objeto da embed embaixo! Para construir uma embed, você pode utilizar o https://autocode.com/tools/discord/embed-builder/`);
-                m.reply({embeds: [embed]})
+                m.reply({ embeds: [embed] })
                 const collector1 = m.channel.createMessageCollector({ filter: (m) => m.author.id === interaction.user.id });
                 collector1.on('collect', async (m) => {
                     try {
-                        const obj = JSON.parse(`${m.content.replaceAll("`", "\"")[0] !== "{" && m.content.replaceAll("`", "\"")[m.content.length - 2] !== "}" ? `{ ${m.content.replaceAll("`", "\"")} }`:m.content.replaceAll("`", "\"")}`)
-                        if (!(Array.isArray(obj.embeds) ? obj.embeds:obj)) {
+                        const obj = JSON.parse(`${m.content.replaceAll("`", "\"")[0] !== "{" && m.content.replaceAll("`", "\"")[m.content.length - 2] !== "}" ? `{ ${m.content.replaceAll("`", "\"")} }` : m.content.replaceAll("`", "\"")}`)
+                        if (!(Array.isArray(obj.embeds) ? obj.embeds : obj)) {
                             embed.setDescription(`Você não digitou o objeto corretamente.`);
-                            return m.channel.send({embeds: [embed]})
+                            return m.channel.send({ embeds: [embed] })
                         }
                         if (m.content.replaceAll("`", "\"").includes("\"color\"")) {
                             if (Array.isArray(obj.embeds)) {
@@ -106,15 +81,15 @@ async function configTicket(client, interaction, db) {
                             }
                         }
                         embed.setDescription(`Um preview da embed foi criada! Verifique se é exatamente isso.`)
-                        const msg = await m.channel.send({embeds: [embed, ...obj.embeds ?? obj], components: [ new ActionRowBuilder().addComponents(new ButtonBuilder().setCustomId('confirm_msg').setLabel('Confirmar').setStyle(ButtonStyle.Success))]})
-                        const collector = msg.createMessageComponentCollector({filter: (m) => m.user.id === interaction.user.id, time: 3 * 60 * 1000, max: 1})
+                        const msg = await m.channel.send({ embeds: [embed, ...obj.embeds ?? obj], components: [new ActionRowBuilder().addComponents(new ButtonBuilder().setCustomId('confirm_msg').setLabel('Confirmar').setStyle(ButtonStyle.Success))] })
+                        const collector = msg.createMessageComponentCollector({ filter: (m) => m.user.id === interaction.user.id, time: 3 * 60 * 1000, max: 1 })
                         collector.on('collect', (i) => {
-                              if (i.customId === "confirm_msg") {
-                                 writeFileSync('./msg.json', JSON.stringify(obj.embeds ?? obj))
-                                 embed.setDescription(`Você configurou com sucesso!`)
-                                 i.reply({embeds: [embed]})
-                                 collector.stop()
-                              }
+                            if (i.customId === "confirm_msg") {
+                                writeFileSync('./msg.json', JSON.stringify(obj.embeds ?? obj))
+                                embed.setDescription(`Você configurou com sucesso!`)
+                                i.reply({ embeds: [embed] })
+                                collector.stop()
+                            }
                         })
                         collector.on('end', (reason) => {
                             if (reason === "time") {
@@ -126,7 +101,7 @@ async function configTicket(client, interaction, db) {
                         })
                     } catch (e) {
                         embed.setDescription(`Um erro ocorreu! Erro: \`${e.message}\``)
-                        m.channel.send({embeds: [embed]})
+                        m.channel.send({ embeds: [embed] })
                     }
                 })
         }
