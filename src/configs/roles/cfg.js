@@ -11,7 +11,7 @@ const departaments = require('../../tables/models/departaments');
  * @param {Model} db
  */
 
-async function configRoles(client, interaction, db) {
+async function configRoles(client, interaction) {
     const embed = new EmbedBuilder().setColor("#71368A");
 
     const questions = [

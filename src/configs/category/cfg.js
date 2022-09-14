@@ -10,7 +10,7 @@ const { writeFileSync, existsSync } = require('fs')
  * @param {Model} db
  */
 
-async function configTicket(client, interaction, db) {
+async function configTicket(client, interaction) {
     const embed = new EmbedBuilder()
         .setColor("#71368A")
         .setTitle("Configurações")

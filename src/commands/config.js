@@ -5,7 +5,7 @@ const { existsSync } = require('fs')
 
 module.exports.run = async (client, interaction) => {
     const departaments = await config.findAll({where: {id_guild: interaction.guild.id}})
-    const obj1 = roles.findAll({where: {id_guild: interaction.guild.id}})
+    const obj1 = await roles.findAll({where: {id_guild: interaction.guild.id}})
     const embed = new EmbedBuilder()
         .setColor("#71368A")
         .setTitle('Configuração')
@@ -26,7 +26,7 @@ module.exports.run = async (client, interaction) => {
     const msg = await interaction.reply({ embeds: [embed], components: [row], fetchReply: true })
     const collector = msg.createMessageComponentCollector({ filter: (m) => m.user.id === interaction.user.id })
     collector.on('collect', (m) => {
-        require(`../configs/${m.customId.split("_")[1]}/${m.customId.split("_")[2]}`)(client, m, find)
+        require(`../configs/${m.customId.split("_")[1]}/${m.customId.split("_")[2]}`)(client, m)
     })
 };
 module.exports.help = {
