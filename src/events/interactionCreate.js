@@ -55,7 +55,7 @@ module.exports = {
                     const transcripts = (await transcriptModel.findAll()).filter(x => client.channels.cache.get(x.getDataValue('id_channel')));
                     transcripts.forEach(x => {
                         const channel = client.channels.cache.get(x.getDataValue('id_channel'))
-                        channel.send({ content: `Transcript do canal ${interaction.channel.name} com ID ${interaction.channel.id}`, files: [attachment] });
+                        channel.send({ content: `Transcript do canal ${interaction.channel.name} com ID ${interaction.channel.id} \nAutor do ticket: ${client.users.cache.get(ticket.getDataValue('id'))?.username ?? ticket.getDataValue('id')}`, files: [attachment] });
                     })
                     break;
                 case "delete":
