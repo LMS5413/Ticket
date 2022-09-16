@@ -50,7 +50,7 @@ module.exports = {
                     interaction.deferUpdate()
                     let transcript = require('../functions/transcript');
                     let bufferHtml = await transcript(interaction.channel, interaction.guild);
-                    const attachment = new AttachmentBuilder(bufferHtml, `transcript-${ticket.id}.html`);
+                    const attachment = new AttachmentBuilder(bufferHtml, {name: `transcript-${ticket.id}.html`});
                     interaction.channel.send({ content: `Transcript gerado com sucesso!`, files: [attachment] });
                     const transcripts = (await transcriptModel.findAll()).filter(x => client.channels.cache.get(x.getDataValue('id_channel')));
                     transcripts.forEach(x => {
