@@ -5,8 +5,7 @@
   "main": "index.js",
   "license": "Apache-2.0 License",
   "scripts": {
-    "start": "npm install && node index.js",
-    "backup": "rm -rf *"
+    "start": "npm install && node index.js"
   },
   "dependencies": {
     "auto-updater": "^1.0.2",
