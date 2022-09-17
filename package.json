@@ -1,12 +1,11 @@
 {
   "name": "BotTicket",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "este é basicamente um projeto de nivel simples, um bot de ticket do discord V 13.7.0 feito em javascript completo via SelectMenus e usando banco de dados mysql.",
   "main": "index.js",
   "license": "Apache-2.0 License",
   "scripts": {
-    "start": "npm install && node index.js",
-    "backup": "rm -rf *"
+    "start": "npm install && node index.js"
   },
   "dependencies": {
     "auto-updater": "^1.0.2",
@@ -18,7 +17,7 @@
     "sequelize": "^6.15.0"
   },
   "auto-updater":{
-    "repo":"/LMS5413/Ticket",
+    "repo":"LMS5413/Ticket",
     "branch":"main"
   }
 }
