@@ -29,12 +29,7 @@ updater.check().then(async res => {
     } else {
         console.log(colors.green("[Auto-Updater]") + ` Você está na ultima versão do bot!`);
         if (existsSync('./update.zip'))  unlinkSync('./update.zip')
-        if (existsSync('./Ticket-main')) {
-            recursive('./Ticket-main').map(x => x.replaceAll("\\", "/")).forEach(x => {
-                unlinkSync(`./Ticket-main/${x}`)
-            })
-            rmdirSync('./Ticket-main')
-        }
+        if (existsSync('./Ticket-main')) removeFile('./Ticket-main')
         await init(client)
     }
 })
