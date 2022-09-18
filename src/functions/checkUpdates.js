@@ -35,7 +35,7 @@ class CheckUpdates {
                     if (x.length === 1) {
                         const file = readFileSync(`./Ticket-main/${x[0]}`, 'utf-8')
                         const oldFile = readFileSync(`./${x[0]}`, 'utf-8')
-                        if (file === oldFile || (x[0] === "config.json" && Object.keys(file).length === Object.keys(oldFile).length)) return;
+                        if (file === oldFile || (x[0] === "config.json" && Object.keys(JSON.parse(file)).length === Object.keys(JSON.parse(oldFile)).length)) return;
                         writeFileSync(`./${x[0]}`, readFileSync(`./Ticket-main/${x[0]}`, 'utf-8'))
                     } else {
                         const file = readFileSync(`./Ticket-main/${x.filter(x => !x.includes(".")).join("/")}/${x[x.length - 1]}`, 'utf-8')
