@@ -6,6 +6,7 @@ const colors = require('colors');
 console.log(colors.yellow("[Auto-Updater]") + ' Verificando se há atualizações disponíveis');
 const { version } = require('./package.json');
 const init = require('./src/functions/init');
+const { existsSync } = require('fs');
 const updater = new (require('./src/functions/checkUpdates'))()
 updater.check().then(async res => {
     if (res.update) {
@@ -26,6 +27,8 @@ updater.check().then(async res => {
         })
     } else {
         console.log(colors.green("[Auto-Updater]") + ` Você está na ultima versão do bot!`);
+        if (existsSync('./update.zip'))  unlinkSync('./update.zip')
+        if (existsSync('./Ticket-main')) unlinkSync('./Ticket-main')
         await init(client)
     }
 })
