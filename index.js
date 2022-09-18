@@ -6,7 +6,7 @@ const colors = require('colors');
 console.log(colors.yellow("[Auto-Updater]") + ' Verificando se há atualizações disponíveis');
 const { version } = require('./package.json');
 const init = require('./src/functions/init');
-const { existsSync } = require('fs');
+const { existsSync, unlinkSync } = require('fs');
 const updater = new (require('./src/functions/checkUpdates'))()
 updater.check().then(async res => {
     if (res.update) {
