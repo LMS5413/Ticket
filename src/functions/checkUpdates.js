@@ -31,7 +31,7 @@ class CheckUpdates {
             exec(os.platform() === "win32" ? "tar -xf update.zip":"unzip update.zip").on('exit', (m) => {
                 const foldersInFiles = readRecursive('./Ticket-main').map(x => x.split(os.platform() === "win32" ? "\\":"/"))
                 for (let i = 0; i < foldersInFiles.length; i++) {
-                    const x = foldersInFiles.map(x => x.split(os.platform() === "win32" ? "\\":"/"))[i]
+                    const x = foldersInFiles[i].map(x => x.split(os.platform() === "win32" ? "\\":"/"))
                     if (x.length === 1) {
                         const file = readFileSync(`./Ticket-main/${x[0]}`, 'utf-8')
                         const oldFile = readFileSync(`./${x[0]}`, 'utf-8')
