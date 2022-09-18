@@ -29,11 +29,11 @@ class CheckUpdates {
             }
             console.log(colors.green("[Auto-Updater]") + ` Plataforma: ${os.platform() === "win32" ? "Windows":"Linux"} \nComando para descompactar arquivo: ${os.platform() === "win32" ? "tar":"unzip"}`);
             exec(os.platform() === "win32" ? "tar -xf update.zip":"unzip update.zip").on('exit', (m) => {
-                readRecursive('./Ticket-main').map(x => x.split(os.platform() === "win32" ? "\\":"/")).forEach(x => {
+                readRecursive('./Ticket-main').map(x => x.split(os.platform() === "win32" ? "\\":"/")).forEach(async x => {
                     if (x.length === 1) {
                         const file = readFileSync(`./Ticket-main/${x[0]}`, 'utf-8')
                         const oldFile = readFileSync(`./${x[0]}`, 'utf-8')
-                        if (file === oldFile && x[0] === "config.json" && Object.keys(file).length === Object.keys(oldFile).length) return;
+                        if (file === oldFile || (x[0] === "config.json" && Object.keys(file).length === Object.keys(oldFile).length)) return;
                         writeFileSync(`./${x[0]}`, readFileSync(`./Ticket-main/${x[0]}`, 'utf-8'))
                     } else {
                         const file = readFileSync(`./Ticket-main/${x.filter(x => !x.includes(".")).join("/")}/${x[x.length - 1]}`, 'utf-8')
@@ -43,6 +43,8 @@ class CheckUpdates {
                     }
                 })
                 console.log(colors.red("[Auto-Updater]") + ` O bot foi atualizado com sucesso! Pedimos que você ligue novamente para aplicar as alterações`)
+                unlinkSync('./Ticket-main')
+                unlinkSync('./update.zip')
             })
         })
     }
