@@ -1,7 +1,7 @@
 const packageJson = require('../../package.json')
 const { default: axios } = require('axios')
 const { resolve } = require('path')
-const { createWriteStream, unlinkSync, writeFileSync, readFileSync, readdirSync } = require('fs')
+const { createWriteStream, unlinkSync, writeFileSync, readFileSync } = require('fs')
 const colors = require('colors')
 const readRecursive = require('fs-readdir-recursive')
 const os = require('os')
@@ -34,6 +34,11 @@ class CheckUpdates {
                         const file = readFileSync(`./Ticket-main/${x[0]}`, 'utf-8')
                         const oldFile = readFileSync(`./${x[0]}`, 'utf-8')
                         if (file === oldFile || (x[0] === "config.json" && Object.keys(JSON.parse(file)).length === Object.keys(JSON.parse(oldFile)).length)) return;
+                        writeFileSync(`./${x[0]}`, file)
+                    } else {
+                        const file = readFileSync(`./Ticket-main/${x.filter(x => !x.includes(".")).join("/")}/${x[x.length - 1]}`, 'utf-8')
+                        const oldFile = readFileSync(`./${x.filter(x => !x.includes(".")).join("/")}/${x[x.length - 1]}`, 'utf-8')
+                        if (file === oldFile) return;
                         writeFileSync(`./${x.filter(x => !x.includes(".")).join("/")}/${x[x.length - 1]}`, file)
                     }
                 })
