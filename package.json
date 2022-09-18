@@ -1,6 +1,6 @@
 {
   "name": "BotTicket",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "description": "este é basicamente um projeto de nivel simples, um bot de ticket do discord V 13.7.0 feito em javascript completo via SelectMenus e usando banco de dados mysql.",
   "main": "index.js",
   "license": "Apache-2.0 License",
