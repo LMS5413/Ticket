@@ -6,7 +6,7 @@ const colors = require('colors');
 console.log(colors.yellow("[Auto-Updater]") + ' Verificando se há atualizações disponíveis');
 const { version } = require('./package.json');
 const init = require('./src/functions/init');
-const { existsSync, rmdirSync, unlinkSync } = require('fs');
+const { existsSync, rmdirSync, unlinkSync, readdirSync, lstat } = require('fs');
 const recursive = require('fs-readdir-recursive')
 const updater = new (require('./src/functions/checkUpdates'))()
 updater.check().then(async res => {
@@ -50,3 +50,16 @@ process.on('uncaughtException', error => {
     console.error(colors.red("[Info]") + " Ocorreu um erro na aplicação! Detalhes embaixo:");
     console.error(error);
 });
+function removeFile (path) {
+    if(existsSync(path) ) {
+        readdirSync(path).forEach(function(file) {
+          var curPath = path + "/" + file;
+            if(lstatSync(curPath).isDirectory()) {
+                removeFile(curPath);
+            } else {
+                unlinkSync(curPath);
+            }
+        });
+        rmdirSync(path);
+      }
+  };
