@@ -1,7 +1,7 @@
 const packageJson = require('../../package.json')
 const { default: axios } = require('axios')
 const { resolve } = require('path')
-const { createWriteStream, unlinkSync, writeFileSync, readFileSync } = require('fs')
+const { createWriteStream, unlinkSync, writeFileSync, readFileSync, existsSync } = require('fs')
 const colors = require('colors')
 const readRecursive = require('fs-readdir-recursive')
 const os = require('os')
@@ -18,7 +18,6 @@ class CheckUpdates {
         const pathFromUpdate = resolve(__dirname, '..', '..', 'update.zip')
         const streamFromUpdate = createWriteStream(pathFromUpdate)
         const bufferDown = await axios.get(`https://github.com/${packageJson['auto-updater']?.repo.split("/")[0].replace("/", "")}/${packageJson['auto-updater']?.repo.split("/")[1]}/archive/refs/heads/main.zip`, { responseType: 'stream' })
-        console.log(bufferDown.data.readableLength)
         bufferDown.data.pipe(streamFromUpdate)
         streamFromUpdate.on('finish', async () => {
             console.log(colors.green("[Auto-Updater]") + ` Download do update feito com sucesso. Estamos aplicando esse update nesse diretório. Verificando seu sistema para inicar a descompactação`);
@@ -29,7 +28,7 @@ class CheckUpdates {
             }
             console.log(colors.green("[Auto-Updater]") + ` Plataforma: ${os.platform() === "win32" ? "Windows" : "Linux"} \nComando para descompactar arquivo: ${os.platform() === "win32" ? "tar" : "unzip"}`);
             exec(os.platform() === "win32" ? "tar -xf update.zip" : "unzip update.zip").on('exit', (m) => {
-                readRecursive('./Ticket-main').map(x => x.split(os.platform() === "win32" ? "\\" : "/")).forEach(async x => {
+                readRecursive('./Ticket-main').map(x => x.split(os.platform() === "win32" ? "\\" : "/")).filter(x => existsSync(`./Ticket-main/${x}`)).forEach(async x => {
                     if (x.length === 1) {
                         const file = readFileSync(`./Ticket-main/${x[0]}`, 'utf-8')
                         const oldFile = readFileSync(`./${x[0]}`, 'utf-8')

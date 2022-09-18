@@ -6,8 +6,7 @@ const colors = require('colors');
 console.log(colors.yellow("[Auto-Updater]") + ' Verificando se há atualizações disponíveis');
 const { version } = require('./package.json');
 const init = require('./src/functions/init');
-const { existsSync, rmdirSync, unlinkSync, readdirSync, lstat } = require('fs');
-const recursive = require('fs-readdir-recursive')
+const { existsSync, rmdirSync, unlinkSync, readdirSync, lstatSync } = require('fs');
 const updater = new (require('./src/functions/checkUpdates'))()
 updater.check().then(async res => {
     if (res.update) {
@@ -28,7 +27,7 @@ updater.check().then(async res => {
         })
     } else {
         console.log(colors.green("[Auto-Updater]") + ` Você está na ultima versão do bot!`);
-        if (existsSync('./update.zip'))  unlinkSync('./update.zip')
+        if (existsSync('./update.zip')) unlinkSync('./update.zip')
         if (existsSync('./Ticket-main')) removeFile('./Ticket-main')
         await init(client)
     }
@@ -45,16 +44,16 @@ process.on('uncaughtException', error => {
     console.error(colors.red("[Info]") + " Ocorreu um erro na aplicação! Detalhes embaixo:");
     console.error(error);
 });
-function removeFile (path) {
-    if(existsSync(path) ) {
-        readdirSync(path).forEach(function(file) {
-          var curPath = path + "/" + file;
-            if(lstatSync(curPath).isDirectory()) {
+function removeFile(path) {
+    if (existsSync(path)) {
+        readdirSync(path).forEach(function (file) {
+            var curPath = path + "/" + file;
+            if (lstatSync(curPath).isDirectory()) {
                 removeFile(curPath);
             } else {
                 unlinkSync(curPath);
             }
         });
         rmdirSync(path);
-      }
-  };
+    }
+};
