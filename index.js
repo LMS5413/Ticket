@@ -6,7 +6,8 @@ const colors = require('colors');
 console.log(colors.yellow("[Auto-Updater]") + ' Verificando se há atualizações disponíveis');
 const { version } = require('./package.json');
 const init = require('./src/functions/init');
-const { existsSync, rmdirSync, unlinkSync, readdirSync, lstatSync } = require('fs');
+const { existsSync, unlinkSync } = require('fs');
+const removeFile = require('./src/functions/removeFile')
 const updater = new (require('./src/functions/checkUpdates'))()
 updater.check().then(async res => {
     if (res.update) {
@@ -44,16 +45,3 @@ process.on('uncaughtException', error => {
     console.error(colors.red("[Info]") + " Ocorreu um erro na aplicação! Detalhes embaixo:");
     console.error(error);
 });
-function removeFile(path) {
-    if (existsSync(path)) {
-        readdirSync(path).forEach(function (file) {
-            var curPath = path + "/" + file;
-            if (lstatSync(curPath).isDirectory()) {
-                removeFile(curPath);
-            } else {
-                unlinkSync(curPath);
-            }
-        });
-        rmdirSync(path);
-    }
-};

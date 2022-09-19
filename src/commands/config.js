@@ -5,6 +5,7 @@ const { existsSync } = require('fs');
 const transcript = require('../tables/models/transcript_channel');
 
 module.exports.run = async (client, interaction) => {
+    await interaction.deferReply({fetchReply: true})
     const departaments = await config.findAll({where: {id_guild: interaction.guild.id}})
     const obj1 = await roles.findAll({where: {id_guild: interaction.guild.id}})
     const embed = new EmbedBuilder()
@@ -30,7 +31,7 @@ module.exports.run = async (client, interaction) => {
                 .setLabel('Canal de registro dos tickets')
                 .setStyle(ButtonStyle.Primary)
         )
-    const msg = await interaction.reply({ embeds: [embed], components: [row], fetchReply: true })
+    const msg = await interaction.editReply({ embeds: [embed], components: [row] })
     const collector = msg.createMessageComponentCollector({ filter: (m) => m.user.id === interaction.user.id })
     collector.on('collect', async (m) => {
         if (m.customId === "transcript_channel") {
