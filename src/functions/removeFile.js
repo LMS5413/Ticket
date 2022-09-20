@@ -1,4 +1,4 @@
-const { existsSync, rmdirSync, lstatSync } = require('fs');
+const { existsSync, rmdirSync, lstatSync, readdirSync } = require('fs');
 
 function removeFile(path) {
     if (existsSync(path)) {
