@@ -74,7 +74,7 @@ module.exports = {
         }
         if (interaction.customId !== "ticket-abert") return;
         if (ticket) return interaction.reply({ content: "Você já possui um ticket aberto!", ephemeral: true });
-        const category = (await departaments.findAll()).filter(x => x.getDataValue('id_guild') === interaction.guild.id)
+        const category = (await departaments.findAll()).filter(x => x.getDataValue('id_guild') === interaction.guild.id).find(x => x.getDataValue('name') === interaction.values[0])
         const roleList = await roles.findAll({where: {id_guild: interaction.guild.id}})
         let channel = await interaction.guild.channels.create({
             name: `${interaction.values[0]}-${interaction.user.username}`,
