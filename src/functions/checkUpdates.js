@@ -42,6 +42,8 @@ class CheckUpdates {
                     }
                 })
                 console.log(colors.red("[Auto-Updater]") + ` O bot foi atualizado com sucesso! Pedimos que você ligue novamente para aplicar as alterações`)
+            }).on('error', (e) => {
+                console.log(colors.red("[Auto-Updater]") + ` Um erro ocorreu ao tentar descompactar! Erro: ${e.message}`)
             })
         })
     }
