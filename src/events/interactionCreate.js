@@ -17,7 +17,7 @@ module.exports = {
         if (interaction.isButton()) {
             if (interaction.customId === "fechar") {
                 if (!ticket) return interaction.deferUpdate()
-                await interaction.channel.permissionOverwrites.edit(ticket.getDataValue('id'), {ViewChannel: false});
+                await interaction.channel.permissionOverwrites.edit(interaction.user, {ViewChannel: false});
                 const embed = new EmbedBuilder()
                     .setTitle("Atendimento")
                     .setDescription("Atendimento fechado com sucesso!");
@@ -66,7 +66,7 @@ module.exports = {
                     break;
                 case "reabrir":
                     interaction.deferUpdate()
-                    await interaction.channel.permissionOverwrites.edit(ticket.getDataValue('id'), { ViewChannel: true });
+                    await interaction.channel.permissionOverwrites.edit(ticket.id, { ViewChannel: true });
                     interaction.message.delete();
                     break;
             }
@@ -79,7 +79,7 @@ module.exports = {
         let channel = await interaction.guild.channels.create({
             name: `${interaction.values[0]}-${interaction.user.username}`,
             type: ChannelType.GuildText,
-            parent: client.channels.cache.get(category?.getDataValue('category_id'))?.id ?? null,
+            parent: client.channels.cache.get(category.getDataValue('category_id'))?.id ?? null,
             permissionOverwrites: [
                 {
                     id: client.user.id,
