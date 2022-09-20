@@ -48,12 +48,17 @@ async function configTicket(client, interaction) {
                 const arr = [];
                 collector.on('collect', async (m) => {
                     if (m.content.toLowerCase() === "terminei") return collector.stop();
+                    if (m.content.toLowerCase() === "cancelar") {
+                        collector.stop("cancelled")
+                        return m.channel.send("Cancelado")
+                    }
                     if (!m.content.includes("-")) return m.channel.send("Invalido!");
                     const findDepartament = await departaments.findOne({ where: { id_guild: interaction.guild.id, name: m.content.split("-")[0] } })
                     if (findDepartament) return m.channel.send('Essa categoria já existe!')
                     arr.push({ category: m.content.split("-")[0], id: m.content.split("-")[1] === "null" || !m.content.split("-")[1] ? null : m.content.split("-")[1], description: m.content.split("-")[2] === "null" || !m.content.split("-")[2] ? null : m.content.split("-")[2] });
                 })
-                collector.on('end', async () => {
+                collector.on('end', async (reason) => {
+                    if (reason === "cancelled") return;
                     arr.forEach(async x => {
                         await departaments.create({ name: x.category, category_id: x.id && client.channels.cache.get(x.id).type === ChannelType.GuildCategory ? x.id : null, description: x.description, id_guild: interaction.guild.id })
                     })
@@ -67,7 +72,8 @@ async function configTicket(client, interaction) {
                 const collector1 = m.channel.createMessageCollector({ filter: (m) => m.author.id === interaction.user.id });
                 collector1.on('collect', async (m) => {
                     try {
-                        const obj = JSON.parse(`${m.content.replace("const lib = require('lib')({token: process.env.STDLIB_SECRET_TOKEN});", "").replace("await lib.discord.channels['@0.3.0'].messages.create(", "").replace("});", "}").replaceAll("`", "\"")[0] !== "{" && m.content.replaceAll("`", "\"")[m.content.length - 2] !== "}" ? `{ ${m.content.replaceAll("`", "\"")} }` : m.content.replaceAll("`", "\"")}`)
+                        const content1 = m.content.replaceAll("const lib = require('lib')({token: process.env.STDLIB_SECRET_TOKEN});", "").replaceAll("await lib.discord.channels['@0.3.0'].messages.create(", "").replaceAll("});", "}").trim()
+                        const obj = JSON.parse(`${content1.replaceAll("`", "\"")[0] !== "{" && content1.replaceAll("`", "\"")[content1.length - 2] !== "}" ? `{ ${content1.replaceAll("`", "\"")} }` : content1.replaceAll("`", "\"")}`)
                         if (!(Array.isArray(obj.embeds) ? obj.embeds : obj)) {
                             embed.setDescription(`Você não digitou o objeto corretamente.`);
                             return m.channel.send({ embeds: [embed] })
