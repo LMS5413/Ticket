@@ -73,6 +73,7 @@ module.exports = {
             return;
         }
         if (interaction.customId !== "ticket-abert") return;
+        interaction.message.edit({components: interaction.message.components})
         if (ticket) return interaction.reply({ content: "Você já possui um ticket aberto!", ephemeral: true });
         const category = (await departaments.findAll()).filter(x => x.getDataValue('id_guild') === interaction.guild.id).find(x => x.getDataValue('name').toLowerCase().replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,'').replace(/\s+/g, ' ').trim() === interaction.values[0])
         const roleList = await roles.findAll({where: {id_guild: interaction.guild.id}})
