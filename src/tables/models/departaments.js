@@ -17,6 +17,10 @@ let departaments = connection.define("TicketsDepartaments", {
     description: {
         type: Sequelize.STRING(100),
         allowNull: true,
+    },
+    emoji: {
+        type: Sequelize.STRING,
+        allowNull: true,
     }
 });
 departaments.sync()
