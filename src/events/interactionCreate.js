@@ -43,7 +43,7 @@ async function configTicket(client, interaction) {
         switch (m.customId) {
             case "category_config":
                 embed.setTitle("Configurações")
-                embed.setDescription(`Digite o nome da categoria junto com ID da categoria no discord que deseja que o canal seja sincronizada \n \n**Exemplos:** \n \n\`Financeiro-categoryid\`\n\`financeiro-null\` (null para caso não queira ID)\n\`financeiro-null-descricao\` \n \nQuando terminar de configurar as categorias digite **terminei** (Envie 1 por 1)`);
+                embed.setDescription(`Digite o nome da categoria junto com ID da categoria no discord que deseja que o canal seja sincronizada \n \n**Exemplos:** \n \n\`Financeiro-categoryid\`\n\`financeiro-null\` (null para caso não queira ID)\n\`financeiro-null-descricao\`\n\`financeiro-null-descricao-emoji\` (Emoji opcional.) \n \nQuando terminar de configurar as categorias digite **terminei** (Envie 1 por 1)`);
 
                 m.reply({ embeds: [embed] });
                 const collector = m.channel.createMessageCollector({ filter: (m) => m.author.id === interaction.user.id });
