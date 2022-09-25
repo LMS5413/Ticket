@@ -15,7 +15,7 @@ let departaments = connection.define("TicketsDepartaments", {
         allowNull: true,
     },
     description: {
-        type: Sequelize.STRING(45),
+        type: Sequelize.STRING(100),
         allowNull: true,
     }
 });
