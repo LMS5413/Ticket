@@ -77,7 +77,8 @@ async function configTicket(client, interaction) {
                         const replaceStr = (str => {return str.replaceAll("const lib = require('lib')({token: process.env.STDLIB_SECRET_TOKEN});", "").replaceAll("await lib.discord.channels['@0.3.0'].messages.create(", "").replaceAll("});", "}").trim()})
                         let content1 = m.attachments.first() && m.attachments.first().name === "embed.txt" ? replaceStr((await axios.get(m.attachments.first().url)).data):replaceStr(m.content)
                         if (m.content.includes("https://sourceb.in/")) {
-                            let sourceDriv = await get({key: m.content.replace("https://sourceb.in/", "")}).catch(e => {return null})
+                            console.log(m.content.replace("https://sourceb.in/", ""))
+                            let sourceDriv = await get(m.content).catch(e => console.log(e))
                             if (!sourceDriv) {
                                 embed.setDescription(`O link enviado não é valido.`)
                                 return m.channel.send({embeds: [embed]})
@@ -89,7 +90,7 @@ async function configTicket(client, interaction) {
                             embed.setDescription(`Você não digitou o objeto corretamente.`);
                             return m.channel.send({ embeds: [embed] })
                         }
-                        if (m.content.replaceAll("`", "\"").includes("\"color\"")) {
+                        if (content1.replaceAll("`", "\"").includes("\"color\"")) {
                             if (Array.isArray(obj.embeds)) {
                                 obj.embeds.forEach(x => {
                                     if (x.color) x.color = parseInt(x.color, 16)
