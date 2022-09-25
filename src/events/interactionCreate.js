@@ -116,8 +116,6 @@ module.exports = {
 
         channel.send({ content: `${interaction.user}`, embeds: [embed], components: [row] });
         await dbTicket.create({ id: interaction.user.id, idc: channel.id });
-
     },
 
 };
-

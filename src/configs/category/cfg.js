@@ -2,6 +2,7 @@ const { Client, ButtonInteraction, EmbedBuilder, ActionRowBuilder, ButtonBuilder
 const { Model } = require('sequelize');
 const departaments = require('../../tables/models/departaments');
 const { writeFileSync, existsSync } = require('fs')
+const axios = require('axios')
 
 /**
  * 
@@ -72,7 +73,8 @@ async function configTicket(client, interaction) {
                 const collector1 = m.channel.createMessageCollector({ filter: (m) => m.author.id === interaction.user.id });
                 collector1.on('collect', async (m) => {
                     try {
-                        const content1 = m.content.replaceAll("const lib = require('lib')({token: process.env.STDLIB_SECRET_TOKEN});", "").replaceAll("await lib.discord.channels['@0.3.0'].messages.create(", "").replaceAll("});", "}").trim()
+
+                        const content1 = m.attachments.first() && m.attachments.first().name === "embed.txt" ? (await axios.get(m.attachments.first().url)).data.replaceAll("const lib = require('lib')({token: process.env.STDLIB_SECRET_TOKEN});", "").replaceAll("await lib.discord.channels['@0.3.0'].messages.create(", "").replaceAll("});", "}").trim():m.content.replaceAll("const lib = require('lib')({token: process.env.STDLIB_SECRET_TOKEN});", "").replaceAll("await lib.discord.channels['@0.3.0'].messages.create(", "").replaceAll("});", "}").trim()
                         const obj = JSON.parse(`${content1.replaceAll("`", "\"")[0] !== "{" && content1.replaceAll("`", "\"")[content1.length - 2] !== "}" ? `{ ${content1.replaceAll("`", "\"")} }` : content1.replaceAll("`", "\"")}`)
                         if (!(Array.isArray(obj.embeds) ? obj.embeds : obj)) {
                             embed.setDescription(`Você não digitou o objeto corretamente.`);
