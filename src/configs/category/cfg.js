@@ -1,6 +1,6 @@
 const { Client, ButtonInteraction, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ChannelType } = require('discord.js')
 const { Model } = require('sequelize');
-const departaments = require('../../tables/models/departaments');
+const departaments = require('../tables/models/departaments');
 const { writeFileSync, existsSync } = require('fs')
 const axios = require('axios')
 const { get } = require('sourcebin')
