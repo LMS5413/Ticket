@@ -15,7 +15,8 @@
     "mongoose": "^6.1.8",
     "mysql2": "^2.3.3",
     "reconlx": "^2.5.2",
-    "sequelize": "^6.15.0"
+    "sequelize": "^6.15.0",
+    "sourcebin": "^5.0.0"
   },
   "auto-updater": {
     "repo": "LMS5413/Ticket",

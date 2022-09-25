@@ -3,6 +3,7 @@ const { Model } = require('sequelize');
 const departaments = require('../../tables/models/departaments');
 const { writeFileSync, existsSync } = require('fs')
 const axios = require('axios')
+const { get } = require('sourcebin')
 
 /**
  * 
@@ -73,8 +74,16 @@ async function configTicket(client, interaction) {
                 const collector1 = m.channel.createMessageCollector({ filter: (m) => m.author.id === interaction.user.id });
                 collector1.on('collect', async (m) => {
                     try {
-
-                        const content1 = m.attachments.first() && m.attachments.first().name === "embed.txt" ? (await axios.get(m.attachments.first().url)).data.replaceAll("const lib = require('lib')({token: process.env.STDLIB_SECRET_TOKEN});", "").replaceAll("await lib.discord.channels['@0.3.0'].messages.create(", "").replaceAll("});", "}").trim():m.content.replaceAll("const lib = require('lib')({token: process.env.STDLIB_SECRET_TOKEN});", "").replaceAll("await lib.discord.channels['@0.3.0'].messages.create(", "").replaceAll("});", "}").trim()
+                        const replaceStr = (str => {return str.replaceAll("const lib = require('lib')({token: process.env.STDLIB_SECRET_TOKEN});", "").replaceAll("await lib.discord.channels['@0.3.0'].messages.create(", "").replaceAll("});", "}").trim()})
+                        let content1 = m.attachments.first() && m.attachments.first().name === "embed.txt" ? replaceStr((await axios.get(m.attachments.first().url)).data):replaceStr(m.content)
+                        if (m.content.includes("https://sourceb.in/")) {
+                            let sourceDriv = await get({key: m.content.replace("https://sourceb.in/", "")}).catch(e => {return null})
+                            if (!sourceDriv) {
+                                embed.setDescription(`O link enviado não é valido.`)
+                                return m.channel.send({embeds: [embed]})
+                            }
+                            content1 = replaceStr(sourceDriv.files[0].content)
+                        }
                         const obj = JSON.parse(`${content1.replaceAll("`", "\"")[0] !== "{" && content1.replaceAll("`", "\"")[content1.length - 2] !== "}" ? `{ ${content1.replaceAll("`", "\"")} }` : content1.replaceAll("`", "\"")}`)
                         if (!(Array.isArray(obj.embeds) ? obj.embeds : obj)) {
                             embed.setDescription(`Você não digitou o objeto corretamente.`);
