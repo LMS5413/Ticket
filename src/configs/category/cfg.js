@@ -56,7 +56,7 @@ async function configTicket(client, interaction) {
                     }
                     if (!m.content.includes("-")) return m.channel.send("Invalido!");
                     const findDepartament = await departaments.findOne({ where: { id_guild: interaction.guild.id, name: m.content.split("-")[0] } })
-                    if (findDepartament) return m.channel.send('Essa categoria já existe!')
+                    if (findDepartament || arr.find(x => x.category === m.content.split("-")[0])) return m.channel.send('Essa categoria já existe!')
                     arr.push({ category: m.content.split("-")[0], id: m.content.split("-")[1] === "null" || !m.content.split("-")[1] ? null : m.content.split("-")[1], description: m.content.split("-")[2] === "null" || !m.content.split("-")[2] ? null : m.content.split("-")[2], emoji: !m.content.split("-")[3] || m.content.split("-")[3] === "null" ? null : m.content.split("-")[3].match(/<a?:[a-zA-Z0-9_]+:[0-9]+>/g) ? m.content.split("-")[3].match(/<a?:[a-zA-Z0-9_]+:[0-9]+>/g)[0].split(":")[m.content.split("-")[3].match(/<a?:[a-zA-Z0-9_]+:[0-9]+>/g)[0] === "a" ? 2:1]:m.content.split("-")[3] });
                 })
                 collector.on('end', async (reason) => {
