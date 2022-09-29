@@ -43,7 +43,7 @@ async function configTicket(client, interaction) {
         switch (m.customId) {
             case "category_config":
                 embed.setTitle("Configurações")
-                embed.setDescription(`Digite o nome da categoria junto com ID da categoria no discord que deseja que o canal seja sincronizada \n \n**Exemplos:** \n \n\`Financeiro-categoryid\`\n\`financeiro-null\` (null para caso não queira ID)\n\`financeiro-null-descricao\`\n\`financeiro-null-descricao-emoji\` (Emoji opcional) \n \nQuando terminar de configurar as categorias digite **terminei** (Envie 1 por 1)`);
+                embed.setDescription(`Digite o nome da categoria junto com ID da categoria no discord que deseja que o canal seja sincronizada \n \n**Exemplos:** \n \n\`Financeiro-categoryid\`\n\`financeiro-null\` (null para caso não queira ID)\n\`financeiro-null-descricao\`\n\`financeiro-null-descricao-emoji\` (Emoji opcional) \n \nQuando terminar de configurar as categorias digite **terminei** (Envie 1 por 1) \n \n**Não coloque categorias com mesmo nome.**`);
 
                 m.reply({ embeds: [embed] });
                 const collector = m.channel.createMessageCollector({ filter: (m) => m.author.id === interaction.user.id });
@@ -55,21 +55,21 @@ async function configTicket(client, interaction) {
                         return m.channel.send("Cancelado")
                     }
                     if (!m.content.includes("-")) return m.channel.send("Invalido!");
-                    const findDepartament = await departaments.findOne({ where: { id_guild: interaction.guild.id, name: m.content.split("-")[0] } })
-                    if (findDepartament || arr.find(x => x.category === m.content.split("-")[0])) return m.channel.send('Essa categoria já existe!')
+                    const findDepartament = (await departaments.findAll({ where: { id_guild: interaction.guild.id } })).find(x => x.getDataValue('name').split("-")[0].toLowerCase() === m.content.split("-")[0].toLowerCase());
+                    if (findDepartament || arr.find(x => x.category.split("-")[0] === m.content.split("-")[0])) return m.channel.send('Essa categoria já existe!')
                     arr.push({ category: m.content.split("-")[0], id: m.content.split("-")[1] === "null" || !m.content.split("-")[1] ? null : m.content.split("-")[1], description: m.content.split("-")[2] === "null" || !m.content.split("-")[2] ? null : m.content.split("-")[2], emoji: !m.content.split("-")[3] || m.content.split("-")[3] === "null" ? null : m.content.split("-")[3].match(/<a?:[a-zA-Z0-9_]+:[0-9]+>/g) ? m.content.split("-")[3].match(/<a?:[a-zA-Z0-9_]+:[0-9]+>/g)[0].split(":")[m.content.split("-")[3].match(/<a?:[a-zA-Z0-9_]+:[0-9]+>/g)[0] === "a" ? 2:1]:m.content.split("-")[3] });
                 })
                 collector.on('end', async (reason) => {
                     if (reason === "cancelled") return;
                     arr.forEach(async x => {
-                        await departaments.create({ name: x.category, category_id: x.id && client.channels.cache.get(x.id).type === ChannelType.GuildCategory ? x.id : null, description: x.description, id_guild: interaction.guild.id, emoji: x.emoji })
+                        await departaments.create({ name: `${x.category}-${generateCode()}`, category_id: x.id && client.channels.cache.get(x.id)?.type === ChannelType.GuildCategory ? x.id : null, description: x.description, id_guild: interaction.guild.id, emoji: x.emoji })
                     })
                     embed.setDescription(`Categorias configurado com sucesso.`)
                     m.channel.send({embeds: [embed]})
                 })
                 break;
             case "msg_principal":
-                embed.setDescription(`Digite o objeto da embed embaixo! Para construir uma embed, você pode utilizar o https://autocode.com/tools/discord/embed-builder/`);
+                embed.setDescription(`Digite o objeto da embed embaixo! Para construir uma embed, você pode utilizar o https://autocode.com/tools/discord/embed-builder/ \n \n**OBSERVAÇÕES** \n \n1 - A embed gerada no site a cor vem em número, coloque entre aspas a cor para não ter problemas \n**Exemplo:** \n \n No site: \`\`\`"color": aaaaaa\`\`\` \nSua alteração: \`\`\`"color": "aaaaaa"\`\`\``);
                 m.reply({ embeds: [embed] })
                 const collector1 = m.channel.createMessageCollector({ filter: (m) => m.author.id === interaction.user.id });
                 collector1.on('collect', async (m) => {
@@ -77,7 +77,6 @@ async function configTicket(client, interaction) {
                         const replaceStr = (str => {return str.replaceAll("const lib = require('lib')({token: process.env.STDLIB_SECRET_TOKEN});", "").replaceAll("await lib.discord.channels['@0.3.0'].messages.create(", "").replaceAll("});", "}").trim()})
                         let content1 = m.attachments.first() && m.attachments.first().name === "embed.txt" ? replaceStr((await axios.get(m.attachments.first().url)).data):replaceStr(m.content)
                         if (m.content.includes("https://sourceb.in/")) {
-                            console.log(m.content.replace("https://sourceb.in/", ""))
                             let sourceDriv = await get(m.content).catch(e => console.log(e))
                             if (!sourceDriv) {
                                 embed.setDescription(`O link enviado não é valido.`)
@@ -127,3 +126,11 @@ async function configTicket(client, interaction) {
     })
 }
 module.exports = configTicket
+function generateCode(len = 3) {
+    let code = "";
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for (let i = 0; i < len; i++) {
+        code += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return code;
+}

@@ -12,12 +12,13 @@ module.exports.run = async (client, interaction) => {
             .setDescription(`Olá! Infelizmente você não configurou as mensagens para poder construir o bot! \n \nDigite </config:${(await client.application.commands.fetch()).find(x => x.name === "config").id}> para poder configurar seu bot!`);
         return interaction.reply({embeds: [embed], ephemeral: true})
     };
+    const reg = /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g
     const row = new ActionRowBuilder()
         .addComponents(
             new SelectMenuBuilder()
                 .setCustomId('ticket-abert')
                 .setPlaceholder('Selecione o tipo de atendimento!')
-                .addOptions(find.map(x => ({label: x.getDataValue('name'), description: x.getDataValue('description') ?? "Sem descrição", value: x.getDataValue('name').toLowerCase().replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,'').replace(/\s+/g, ' ').trim(), emoji: x.emoji || undefined})).slice(0, 25)),
+                .addOptions(find.map(x => ({label: x.getDataValue('name').split("-")[0], description: x.getDataValue('description') ?? "Sem descrição", value: x.getDataValue('name').toLowerCase().replace(reg, '').replace(/\s+/g, ' ').trim(), emoji: x.emoji || undefined})).slice(0, 25)),
         );
     interaction.reply({content: 'Mensagem criada com sucesso', ephemeral: true})
     const embed = JSON.parse(readFileSync('./msg.json', 'utf-8'))
