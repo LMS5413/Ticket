@@ -47,7 +47,7 @@ module.exports = {
             }
             switch (interaction.customId) {
                 case "transcript":
-                    interaction.deferUpdate()
+                    interaction.deferUpdate().catch(e => {return null});
                     let transcript = require('../functions/transcript');
                     let bufferHtml = await transcript(interaction.channel, interaction.guild);
                     const attachment = new AttachmentBuilder(bufferHtml, {name: `transcript-${ticket.id}.html`});
@@ -59,13 +59,13 @@ module.exports = {
                     })
                     break;
                 case "delete":
-                    interaction.deferUpdate()
+                    interaction.deferUpdate().catch(e => {return null});
                     let close = require('../functions/deleteTicket');
                     close(interaction.channel);
                     dbTicket.destroy({ where: { idc: interaction.channel.id } });
                     break;
                 case "reabrir":
-                    interaction.deferUpdate()
+                    interaction.deferUpdate().catch(e => {return null});
                     await interaction.channel.permissionOverwrites.edit(ticket.id, { ViewChannel: true });
                     interaction.message.delete();
                     break;
