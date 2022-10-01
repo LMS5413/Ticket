@@ -80,7 +80,7 @@ module.exports = {
         let channel = await interaction.guild.channels.create({
             name: `${interaction.values[0].split("-")[0]}-${interaction.user.username}`,
             type: ChannelType.GuildText,
-            parent: client.channels.cache.get(category.getDataValue('category_id'))?.id ?? null,
+            parent: client.channels.cache.get(category?.getDataValue('category_id'))?.id ?? null,
             permissionOverwrites: [
                 {
                     id: client.user.id,
