@@ -78,7 +78,7 @@ module.exports = {
         const category = (await departaments.findAll()).filter(x => x.getDataValue('id_guild') === interaction.guild.id).find(x => x.getDataValue('name').toLowerCase().replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,'').replace(/\s+/g, ' ').trim() === interaction.values[0])
         const roleList = await roles.findAll({where: {id_guild: interaction.guild.id}})
         let channel = await interaction.guild.channels.create({
-            name: `${interaction.values[0]}-${interaction.user.username}`,
+            name: `${interaction.values[0].split("-")[0]}-${interaction.user.username}`,
             type: ChannelType.GuildText,
             parent: client.channels.cache.get(category.getDataValue('category_id'))?.id ?? null,
             permissionOverwrites: [
