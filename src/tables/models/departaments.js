@@ -23,5 +23,5 @@ let departaments = connection.define("TicketsDepartaments", {
         allowNull: true,
     }
 });
-departaments.sync()
+departaments.sync().then(async () => await connection.query('ALTER TABLE TicketsDepartaments CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_bin'))
 module.exports = departaments
