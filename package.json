@@ -10,7 +10,7 @@
   "dependencies": {
     "axios": "^0.27.2",
     "colors": "^1.4.0",
-    "discord.js": "^14.5.0",
+    "discord.js": "^14.6.0",
     "fs-readdir-recursive": "^1.1.0",
     "mongoose": "^6.1.8",
     "mysql2": "^2.3.3",
