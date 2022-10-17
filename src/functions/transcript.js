@@ -1,7 +1,14 @@
 const { generateTranscript } = require('reconlx');
 
 async function transcript(channel, guild) {
-    let msgs = (await channel.messages.fetch()).filter(y => !y.author.bot && y.content.length > 0).map(x => x).reverse();
+    let msgs = [];
+    const getMsg = async (msg, limit=100) => {
+        const messages = await channel.messages.fetch({ limit: limit, before: msg ? msg.id : null });
+        msgs = msgs.concat(messages.array());
+        if (messages.size === limit) {
+            await getMsg(messages.last(), limit);
+        }
+    }
     let transcript = await generateTranscript({ messages: msgs, guild: guild, channel: channel });
     let html = transcript.toString();
 
