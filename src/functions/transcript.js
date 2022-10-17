@@ -9,6 +9,7 @@ async function transcript(channel, guild) {
             await getMsg(messages.last(), limit);
         }
     }
+    getMsg()
     let transcript = await generateTranscript({ messages: msgs, guild: guild, channel: channel });
     let html = transcript.toString();
 
