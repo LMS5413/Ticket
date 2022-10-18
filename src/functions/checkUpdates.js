@@ -28,7 +28,7 @@ class CheckUpdates {
             }
             console.log(colors.green("[Auto-Updater]") + ` Plataforma: ${os.platform() === "win32" ? "Windows" : "Linux"} \nComando para descompactar arquivo: ${os.platform() === "win32" ? "tar" : "unzip"}`);
             exec(os.platform() === "win32" ? "tar -xf update.zip" : "unzip update.zip").on('exit', (m) => {
-                readRecursive('./Ticket-main').map(x => x.split(os.platform() === "win32" ? "\\" : "/")).filter(x => existsSync(`./Ticket-main/${x.join("/")}`)).forEach(async x => {
+                readRecursive('./Ticket-main').map(x => x.split(os.platform() === "win32" ? "\\" : "/")).filter(x => existsSync(`./${x.join("/")}`)).forEach(async x => {
                     if (x.length === 1) {
                         const file = readFileSync(`./Ticket-main/${x[0]}`, 'utf-8')
                         const oldFile = readFileSync(`./${x[0]}`, 'utf-8')
