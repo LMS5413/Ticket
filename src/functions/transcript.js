@@ -10,7 +10,7 @@ async function transcript(channel, guild) {
         }
     }
     await getMsg()
-    let transcript = await generateTranscript({ messages: msgs.filter(x => !x.author.bot), guild: guild, channel: channel });
+    let transcript = await generateTranscript({ messages: msgs.filter(x => !x.author.bot).reverse(), guild: guild, channel: channel });
     let html = transcript.toString();
 
     html = html.replace("<p class='copyright'>© github.com/reconlx</p>", "").replace("\n", "").replace(`Transcripted ${msgs.filter(x => !x.author.bot).length} messages.`, `${msgs.filter(x => !x.author.bot).length} mensagens foram escritas aqui.`);
