@@ -1,4 +1,4 @@
-# UwU Ticket-Bot 
+# UwU Ticket-Bot (Suporte Encerrado)
 
 
 Este é basicamente um projeto de nivel simples, um bot de ticket do discord [V 14.3.0](https://www.npmjs.com/package/discord.js/v/14.3.0) feito em javascript completo via SelectMenus e usando banco de dados mysql.
